@@ -127,15 +127,16 @@ def some_invalid_deductions():
     }    
 
 @pytest.fixture
-def few_valid_deductions():
+def new_valid_deductions():
     return {
         "charity": 5000,
         "mortgage": 5000,
         "child": 5000,
         "tuition": 5000,
         "healthcare": 5000,
-        "sales tax": 5000
-    }  
+        "home office": 5000,
+        "sales tax": 5000,
+    }   
 
 def test_deducted_income_cannot_fall_below_zero():
     income = 10000
@@ -170,8 +171,9 @@ def test_applies_new_itemized_deductions(new_valid_deductions):
 
     deducted_income = calculate_deducted_income_2020(income, new_valid_deductions)
 
-    assert deducted_income == 20000
+    assert deducted_income == 15000
 
+    
 def test_calculate_adjusted_income_tax_burden(all_valid_deductions):
     income = 50000
 
@@ -187,9 +189,9 @@ def test_taxpayer_receiving_a_return_gets_a_return(all_valid_deductions):
 
     assert refund == 197
 
-def test_taxpayer_owing_tax_has_negative_return(few_valid_deductions):
-    taxpayer = TaxPayer(withholdings=3000, income=50000, deductions=few_valid_deductions)
+def test_taxpayer_owing_tax_has_negative_return(new_valid_deductions):
+    taxpayer = TaxPayer(withholdings=3000, income=50000, deductions=new_valid_deductions)
 
     refund = taxpayer.calculate_return_2020()
 
-    assert refund == -1003
+    assert refund == 1397
